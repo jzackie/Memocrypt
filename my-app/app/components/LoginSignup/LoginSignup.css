@@ -63,6 +63,17 @@ input {
     #007700,
     #004600,
     #001100);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-body button:hover:not(:disabled) {
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+}
+
+.form-body button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .forgot-password {
@@ -96,4 +107,90 @@ input {
 
 .upload_reset_key::file-selector-button:hover {
     background-color: #003f00;
+}
+
+/* Reset Key Styles */
+.reset-key-container {
+    text-align: center;
+}
+
+.reset-key-info {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 36, 0, 0.3);
+    border-radius: 15px;
+    border: 1px solid #004400;
+}
+
+.reset-key-info h3 {
+    color: #00FF00;
+    margin-bottom: 0.5rem;
+}
+
+.reset-key-info p {
+    color: #CCCCCC;
+    font-size: 0.9rem;
+}
+
+.reset-key-display {
+    margin-bottom: 2rem;
+}
+
+.reset-key-input {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 2px solid #004400 !important;
+    color: #00FF00 !important;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.reset-key-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.copy-btn, .download-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.copy-btn {
+    background: linear-gradient(45deg, #004400, #006600);
+    color: white;
+}
+
+.download-btn {
+    background: linear-gradient(45deg, #440000, #660000);
+    color: white;
+}
+
+.copy-btn:hover, .download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+}
+
+/* Error message styles */
+.text-red-500 {
+    color: #ff4444;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.mt-1 {
+    margin-top: 0.25rem;
+}
+
+/* Form styles */
+form {
+    width: 100%;
 }
