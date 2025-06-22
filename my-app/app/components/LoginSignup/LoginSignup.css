@@ -11,7 +11,7 @@
 
 .form-heading {
     margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 4rem;
     font-size: 1.5rem;
     text-align: center;
 }
@@ -19,7 +19,7 @@
 .form-toggle {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     background: #202020;
     border-radius: 20px;
     padding: 3px;
@@ -51,8 +51,7 @@ input {
     margin-bottom: 1rem;
 }
 
-.signup-form button,
-.signin-form button {
+.form-body button {
     border: none;
     cursor: pointer;
     width: 100%;
@@ -77,4 +76,24 @@ input {
 
 .forgot-password:hover {
     color: #00FF00;
+}
+
+.upload_reset_key {
+    background-color: rgba(40, 40, 40, 0.3);
+    color: white;
+}
+
+.upload_reset_key::file-selector-button {
+    background-color: #002400;
+    color: #00FF00;
+    border-radius: 12px;
+    padding: 7px 30px;
+    margin-right: 20px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.upload_reset_key::file-selector-button:hover {
+    background-color: #003f00;
 }
