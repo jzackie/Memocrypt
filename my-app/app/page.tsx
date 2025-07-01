@@ -4,16 +4,32 @@ import { useRouter } from "next/navigation";
 import LoginSignup from "./components/LoginSignup/LoginSignup";
 import Cube from "./components/Cube/Cube";
 import "./page.css";
+import Image from "next/image";
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-function groupNotesByDate(notes: any[]) {
+type Attachment = {
+  url: string;
+  name?: string;
+  type?: string;
+};
+
+type Note = {
+  _id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+  attachments?: Attachment[];
+};
+
+function groupNotesByDate(notes: Note[]) {
   const today = new Date();
   const todayStr = today.toLocaleDateString();
-  const groups: Record<string, any[]> = {};
+  const groups: Record<string, Note[]> = {};
   notes.forEach(note => {
     const noteDate = new Date(note.updatedAt || note.createdAt);
     const noteDateStr = noteDate.toLocaleDateString();
@@ -47,7 +63,13 @@ const EditIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"/></svg>
 );
 
-const NoteModal = ({ open, onClose, initial }: any) => {
+type NoteModalProps = {
+  open: boolean;
+  onClose: () => void;
+  initial: Note | null;
+};
+
+const NoteModal = ({ open, onClose, initial }: NoteModalProps) => {
   const router = useRouter();
   if (!open) return null;
   const { title, content, updatedAt, createdAt, _id } = initial || {};
@@ -78,10 +100,10 @@ const NoteModal = ({ open, onClose, initial }: any) => {
         {/* Attachments preview in modal */}
         {initial && initial.attachments && initial.attachments.length > 0 && (
           <div style={{ margin: '16px 0 0 0', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            {initial.attachments.map((att: any, idx: number) => (
+            {initial.attachments.map((att, idx) => (
               <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                 {att.type && att.type.startsWith('image') ? (
-                  <img src={att.url} alt={att.name} style={{ maxWidth: 120, maxHeight: 120, borderRadius: 8, background: '#181818' }} />
+                  <Image src={att.url} alt={att.name || 'attachment'} width={120} height={120} style={{ maxWidth: 120, maxHeight: 120, borderRadius: 8, background: '#181818' }} />
                 ) : att.type && att.type.startsWith('video') ? (
                   <video src={att.url} controls style={{ maxWidth: 160, maxHeight: 120, borderRadius: 8, background: '#181818' }} />
                 ) : (
@@ -101,9 +123,9 @@ const NoteModal = ({ open, onClose, initial }: any) => {
 };
 
 export default function MainPage() {
-  const [notes, setNotes] = useState<any[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
-  const [previewNote, setPreviewNote] = useState<any>(null);
+  const [previewNote, setPreviewNote] = useState<Note | null>(null);
   const [user, setUser] = useState<any>(null);
   const [filter, setFilter] = useState("");
   const router = useRouter();
@@ -163,7 +185,7 @@ export default function MainPage() {
     : [];
   const grouped = groupNotesByDate(filteredNotes);
 
-  const handleDownload = (note: any) => {
+  const handleDownload = (note: Note) => {
     const blob = new Blob([
       `Title: ${note.title}\n\n${note.content}`
     ], { type: 'text/plain' });
