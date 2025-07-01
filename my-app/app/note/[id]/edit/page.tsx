@@ -2,18 +2,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import "../../../page.css";
+import Image from "next/image";
 
 function formatDate(date: Date | string) {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-function debounce(fn: (...args: any[]) => void, delay: number) {
-  let timer: any;
-  return (...args: any[]) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
 }
 
 const ClockIcon = () => (
@@ -40,7 +33,6 @@ export default function EditNotePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [fileName, setFileName] = useState<string>("");
   const [user, setUser] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [attachments, setAttachments] = useState<{ url: string; type?: string; name?: string }[]>([]);
@@ -241,13 +233,9 @@ export default function EditNotePage() {
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <button onClick={() => handleDeleteAttachment(idx)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: 2 }} title="Remove attachment"><TrashIcon /></button>
                   {att.type && att.type.startsWith('image') ? (
-                    <a href={att.url} target="_blank" rel="noopener noreferrer">
-                      <img src={att.url} alt={att.name} style={{ maxWidth: 80, maxHeight: 80, borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
-                    </a>
+                    <Image src={att.url} alt={att.name || 'attachment'} width={80} height={80} style={{ borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
                   ) : att.type && att.type.startsWith('video') ? (
-                    <a href={att.url} target="_blank" rel="noopener noreferrer">
-                      <video src={att.url} controls style={{ maxWidth: 120, maxHeight: 80, borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
-                    </a>
+                    <video src={att.url} controls style={{ maxWidth: 120, maxHeight: 80, borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
                   ) : (
                     <a href={att.url} target="_blank" rel="noopener noreferrer" style={{ color: '#39ff14', textDecoration: 'underline', fontSize: 14 }}>{att.name}</a>
                   )}
