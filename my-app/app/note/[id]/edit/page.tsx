@@ -29,7 +29,9 @@ const TrashIcon = () => (
 export default function EditNotePage() {
   const router = useRouter();
   const params = useParams();
-  const noteIdFromParams = params?.id || null;
+  const noteIdFromParams = Array.isArray(params?.id)
+    ? params.id[0]
+    : params?.id ?? null;
   const [noteId, setNoteId] = useState<string | null>(noteIdFromParams);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

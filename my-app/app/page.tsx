@@ -73,7 +73,7 @@ const NoteModal = ({ open, onClose, initial }: NoteModalProps) => {
   const router = useRouter();
   if (!open) return null;
   const { title, content, updatedAt, createdAt, _id } = initial || {};
-  const dateStr = updatedAt || createdAt ? formatDate(updatedAt || createdAt) : formatDate(new Date().toISOString());
+  const dateStr = formatDate((updatedAt ?? createdAt ?? new Date().toISOString()));
   const handleEdit = () => {
     if (_id) router.push(`/note/${_id}/edit`);
   };
@@ -255,10 +255,10 @@ export default function MainPage() {
                       {/* Attachments preview at the bottom */}
                       {note.attachments && note.attachments.length > 0 && (
                         <div style={{ margin: '0 0 36px 14px', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                          {note.attachments.slice(0, 2).map((att: any, idx: number) => (
+                          {note.attachments.slice(0, 2).map((att, idx) => (
                             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                               {att.type && att.type.startsWith('image') ? (
-                                <img src={att.url} alt={att.name} style={{ maxWidth: 40, maxHeight: 40, borderRadius: 4, background: '#181818' }} />
+                                <Image src={att.url} alt={att.name || 'attachment'} width={40} height={40} style={{ maxWidth: 40, maxHeight: 40, borderRadius: 4, background: '#181818' }} />
                               ) : att.type && att.type.startsWith('video') ? (
                                 <video src={att.url} style={{ maxWidth: 50, maxHeight: 40, borderRadius: 4, background: '#181818' }} />
                               ) : (
