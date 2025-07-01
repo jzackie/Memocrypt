@@ -18,6 +18,8 @@ function formatDate(date: Date) {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
+type User = { username: string };
+
 export default function NewNotePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -26,7 +28,7 @@ export default function NewNotePage() {
   const [success, setSuccess] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [fileName, setFileName] = useState<string>("");
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [noteId, setNoteId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
