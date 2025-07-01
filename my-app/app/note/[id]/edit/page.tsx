@@ -4,6 +4,8 @@ import { useRouter, useParams } from "next/navigation";
 import "../../../page.css";
 import Image from "next/image";
 
+type User = { username: string };
+
 function formatDate(date: Date | string) {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -33,7 +35,7 @@ export default function EditNotePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [attachments, setAttachments] = useState<{ url: string; type?: string; name?: string }[]>([]);
   const CLOUDINARY_UPLOAD_PRESET = 'unsigned-notes';
