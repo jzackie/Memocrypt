@@ -116,11 +116,13 @@ const NoteModal = ({ open, onClose, initial }: NoteModalProps) => {
   );
 };
 
+type User = { username: string };
+
 export default function MainPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [previewNote, setPreviewNote] = useState<Note | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [filter, setFilter] = useState("");
   const router = useRouter();
 
