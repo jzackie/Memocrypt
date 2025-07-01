@@ -98,7 +98,7 @@ const LoginSignup = () => {
         setResetRequestResult(result.error || 'Could not generate reset key');
         toast.error(result.error || 'Could not generate reset key');
       }
-    } catch (error) {
+    } catch {
       setResetRequestResult('An error occurred');
       toast.error('An error occurred');
     } finally {
@@ -131,7 +131,7 @@ const LoginSignup = () => {
       } else {
         toast.error(result.error || 'Signup failed');
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during signup');
     } finally {
       setIsLoading(false);
@@ -169,7 +169,7 @@ const LoginSignup = () => {
           toast.error(result.error || 'Login failed');
         }
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during login');
     } finally {
       setIsLoading(false);
@@ -218,7 +218,7 @@ const LoginSignup = () => {
           toast.error(result.error || 'Password reset failed');
         }
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during password reset');
     } finally {
       setIsLoading(false);
@@ -235,7 +235,7 @@ const LoginSignup = () => {
           const data = JSON.parse(e.target?.result as string);
           resetForm.setValue('resetKey', data.resetKey);
           toast.success("Reset Key Loaded! Your reset key has been loaded successfully");
-        } catch (error) {
+        } catch {
           toast.error("Invalid File. Please select a valid reset key file");
         }
       };
@@ -263,7 +263,7 @@ const LoginSignup = () => {
       await navigator.clipboard.writeText(resetKey);
       toast.success('Reset key copied to clipboard!');
       await new Promise(res => setTimeout(res, 600));
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy reset key');
     }
   };
