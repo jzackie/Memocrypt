@@ -194,3 +194,69 @@ input {
 form {
     width: 100%;
 }
+
+.login-signup-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: white;
+}
+
+.note-title-input {
+  background: transparent !important;
+}
+
+@media (max-width: 600px) {
+  .auth-container {
+    width: 98vw;
+    min-width: 0;
+    padding: 1rem 0.5rem;
+    border-radius: 12px;
+  }
+  .form-heading {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  .form-toggle {
+    flex-direction: row;
+    gap: 0;
+    padding: 2px;
+  }
+  .form-toggle button {
+    font-size: 15px;
+    padding: 0.4rem;
+  }
+  input {
+    font-size: 15px;
+    padding: 0.6rem;
+    border-radius: 14px;
+  }
+  .form-body button {
+    font-size: 15px;
+    padding: 0.6rem;
+    border-radius: 14px;
+  }
+  .reset-key-info {
+    padding: 0.5rem;
+    font-size: 13px;
+  }
+  .reset-key-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .copy-btn, .download-btn {
+    font-size: 15px;
+    padding: 0.6rem;
+    border-radius: 12px;
+  }
+  .login-signup-center {
+    position: static;
+    transform: none;
+    width: 100vw;
+    min-width: 0;
+    padding: 0;
+  }
+}

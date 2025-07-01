@@ -7,11 +7,16 @@ import { toast } from 'sonner';
 import { z } from "zod";
 import './LoginSignup.css';
 
+// Password policy regex and hint
+const passwordPolicy = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
+const passwordHint = "At least 12 characters, with uppercase, lowercase, number, and special character.";
+
 // Form schemas
 const signupSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(12, "Password must be at least 12 characters")
+    .regex(passwordPolicy, "Password must include uppercase, lowercase, number, and special character."),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -25,7 +30,8 @@ const signinSchema = z.object({
 
 const resetSchema = z.object({
   resetKey: z.string().min(1, "Reset key is required"),
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+  newPassword: z.string().min(12, "Password must be at least 12 characters")
+    .regex(passwordPolicy, "Password must include uppercase, lowercase, number, and special character."),
 });
 
 type SignupForm = z.infer<typeof signupSchema>;
@@ -33,9 +39,10 @@ type SigninForm = z.infer<typeof signinSchema>;
 type ResetForm = z.infer<typeof resetSchema>;
 
 const LoginSignup = () => {
-  const [view, setView] = useState<'signin' | 'signup' | 'forgot' | 'reset' | 'resetKey'>('signin');
+  const [view, setView] = useState<'signin' | 'signup' | 'forgot' | 'reset' | 'resetKey' | 'requestResetKey'>('signin');
   const [resetKey, setResetKey] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
 
   // Form hooks
   const signupForm = useForm<SignupForm>({
@@ -64,11 +71,44 @@ const LoginSignup = () => {
     }
   });
 
+  // Handle forgot password (request new reset key)
+  const [forgotInput, setForgotInput] = useState({ username: '', email: '' });
+  const handleForgotInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForgotInput({ ...forgotInput, [e.target.name]: e.target.value });
+  };
+  const onRequestResetKey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setResetRequestResult(null);
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(forgotInput),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setResetKey(result.resetKey);
+        setView('resetKey');
+        setResetRequestResult(null);
+        toast.success('Reset key generated!');
+      } else {
+        setResetRequestResult(result.error || 'Could not generate reset key');
+        toast.error(result.error || 'Could not generate reset key');
+      }
+    } catch (error) {
+      setResetRequestResult('An error occurred');
+      toast.error('An error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Handle signup
   const onSignup = async (data: SignupForm) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/signup', {
+      const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +140,7 @@ const LoginSignup = () => {
   const onSignin = async (data: SigninForm) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,11 +156,16 @@ const LoginSignup = () => {
       if (response.ok) {
         // Store user data in localStorage for session management
         localStorage.setItem('user', JSON.stringify(result.user));
+        localStorage.setItem('token', result.token);
         toast.success('Login successful!');
         // Redirect to main page
         window.location.href = '/';
       } else {
-        toast.error(result.error || 'Login failed');
+        if (result.error && (result.error.includes('Invalid username or password') || result.error.includes('User not found'))) {
+          toast.error('Incorrect username or password.');
+        } else {
+          toast.error(result.error || 'Login failed');
+        }
       }
     } catch (error) {
       toast.error('An error occurred during login');
@@ -133,7 +178,7 @@ const LoginSignup = () => {
   const onResetPassword = async (data: ResetForm) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch('/api/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,10 +193,20 @@ const LoginSignup = () => {
 
       if (response.ok) {
         toast.success('Password reset successfully!');
-        setView('signin');
-        resetForm.reset();
+        setTimeout(() => {
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          setView('signin');
+          resetForm.reset();
+        }, 600);
       } else {
-        toast.error(result.error || 'Password reset failed');
+        if (result.error && (result.error.includes('Invalid reset key') || result.error.includes('User not found'))) {
+          toast.error('Invalid reset key for this user.');
+        } else if (result.error && result.error.includes('Reset key expired')) {
+          toast.error('Reset key expired. Please request a new one.');
+        } else {
+          toast.error(result.error || 'Password reset failed');
+        }
       }
     } catch (error) {
       toast.error('An error occurred during password reset');
@@ -197,9 +252,17 @@ const LoginSignup = () => {
     try {
       await navigator.clipboard.writeText(resetKey);
       toast.success('Reset key copied to clipboard!');
+      await new Promise(res => setTimeout(res, 600));
     } catch (error) {
       toast.error('Failed to copy reset key');
     }
+  };
+
+  // Add a logout function to clear user and token
+  const logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    window.location.href = '/';
   };
 
   return (
@@ -210,6 +273,7 @@ const LoginSignup = () => {
         {view === 'forgot' && 'Forgot password'}
         {view === 'reset' && 'Reset password'}
         {view === 'resetKey' && 'Your Reset Key'}
+        {view === 'requestResetKey' && 'Request Reset Key'}
       </h2>
 
       {(view === 'signin' || view === 'signup') && (
@@ -259,6 +323,7 @@ const LoginSignup = () => {
               type='password'
               placeholder='Password'
             />
+            <p className='text-sm' style={{ color: '#aaa', marginTop: '-8px', marginBottom: '4px' }}>{passwordHint}</p>
             {signupForm.formState.errors.password && (
               <p className='text-red-500 text-sm mt-1'>
                 {signupForm.formState.errors.password.message}
@@ -319,8 +384,40 @@ const LoginSignup = () => {
           </form>
         )}
 
+        {view === 'requestResetKey' && (
+          <form onSubmit={onRequestResetKey}>
+            <input
+              name="username"
+              type="text"
+              placeholder="Username (or leave blank)"
+              value={forgotInput.username}
+              onChange={handleForgotInput}
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email (or leave blank)"
+              value={forgotInput.email}
+              onChange={handleForgotInput}
+            />
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? 'Requesting...' : 'Request Reset Key'}
+            </button>
+            {resetRequestResult && <p className='text-red-500 text-sm mt-1'>{resetRequestResult}</p>}
+            <div className='forgot-password' onClick={() => setView('forgot')}>
+              Already have a reset key?
+            </div>
+            <div className='forgot-password' onClick={() => setView('signin')}>
+              Go back to login
+            </div>
+          </form>
+        )}
+
         {view === 'forgot' && (
           <>
+            <div className='forgot-password' onClick={() => setView('requestResetKey')}>
+              Need a new reset key?
+            </div>
             <div>
               <input 
                 type='file' 
@@ -347,6 +444,7 @@ const LoginSignup = () => {
                 {...resetForm.register('newPassword')}
                 placeholder='Enter new password' 
               />
+              <p className='text-sm' style={{ color: '#aaa', marginTop: '-8px', marginBottom: '4px' }}>{passwordHint}</p>
               {resetForm.formState.errors.newPassword && (
                 <p className='text-red-500 text-sm mt-1'>
                   {resetForm.formState.errors.newPassword.message}
@@ -374,7 +472,7 @@ const LoginSignup = () => {
           <div className="reset-key-container">
             <div className="reset-key-info">
               <h3>Important: Save Your Reset Key</h3>
-              <p>This is the only way to reset your password if you forget it. Keep it safe!</p>
+              <p style={{ color: 'red', fontWeight: 'bold' }}>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered. Save it securely!</p>
             </div>
             
             <div className="reset-key-display">
