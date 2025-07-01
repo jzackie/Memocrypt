@@ -54,7 +54,7 @@ export default function EditNotePage() {
     })
       .then(res => res.json())
       .then(notes => {
-        const note = Array.isArray(notes) ? notes.find((n: any) => n._id === noteId) : notes;
+        const note = Array.isArray(notes) ? notes.find((n: { _id: string }) => n._id === noteId) : notes;
         if (note) {
           setTitle(note.title);
           setContent(note.content);
@@ -91,9 +91,7 @@ export default function EditNotePage() {
         let data = null;
         try {
           data = await res.json();
-        } catch (e) {
-          setError("Unexpected server response.");
-        }
+        } catch {}
         if (data && typeof data === 'object') {
           if (data._id) {
             setNoteId(data._id);
@@ -115,9 +113,7 @@ export default function EditNotePage() {
         let data = null;
         try {
           data = await res.json();
-        } catch (e) {
-          setError("Unexpected server response.");
-        }
+        } catch {}
         if (data && typeof data === 'object') {
           if (data._id) {
             setNoteId(data._id);
