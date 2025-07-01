@@ -29,6 +29,7 @@ const signinSchema = z.object({
 });
 
 const resetSchema = z.object({
+  usernameOrEmail: z.string().min(1, "Username or email is required"),
   resetKey: z.string().min(1, "Reset key is required"),
   newPassword: z.string().min(12, "Password must be at least 12 characters")
     .regex(passwordPolicy, "Password must include uppercase, lowercase, number, and special character."),
@@ -66,6 +67,7 @@ const LoginSignup = () => {
   const resetForm = useForm<ResetForm>({
     resolver: zodResolver(resetSchema),
     defaultValues: {
+      usernameOrEmail: '',
       resetKey: '',
       newPassword: '',
     }
@@ -178,19 +180,27 @@ const LoginSignup = () => {
   const onResetPassword = async (data: ResetForm) => {
     setIsLoading(true);
     try {
+      // Determine if input is email or username
+      let username = undefined;
+      let email = undefined;
+      if (data.usernameOrEmail.includes('@')) {
+        email = data.usernameOrEmail;
+      } else {
+        username = data.usernameOrEmail;
+      }
       const response = await fetch('/api/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          username,
+          email,
           resetKey: data.resetKey,
           newPassword: data.newPassword,
         }),
       });
-
       const result = await response.json();
-
       if (response.ok) {
         toast.success('Password reset successfully!');
         setTimeout(() => {
@@ -428,6 +438,17 @@ const LoginSignup = () => {
             </div>
             <div>
               <input
+                {...resetForm.register("usernameOrEmail")}
+                placeholder='Enter username or email'
+              />
+              {resetForm.formState.errors.usernameOrEmail && (
+                <p className='text-red-500 text-sm mt-1'>
+                  {resetForm.formState.errors.usernameOrEmail.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <input
                 {...resetForm.register("resetKey")}
                 placeholder='Enter reset key'
               />
@@ -437,7 +458,6 @@ const LoginSignup = () => {
                 </p>
               )}
             </div>
-
             <div>
               <input
                 type='password'
@@ -451,14 +471,12 @@ const LoginSignup = () => {
                 </p>    
               )}
             </div>
-
             <button 
               onClick={resetForm.handleSubmit(onResetPassword)}
               disabled={isLoading}
             >
               {isLoading ? 'Resetting...' : 'Reset password'}
             </button>
-
             <div 
               className='forgot-password'
               onClick={() => setView('signin')}

@@ -178,17 +178,17 @@ export default function MainPage() {
   };
 
   if (!user) {
-    return (
-      <div>
-        <Cube />
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 1,
-          color: 'white'
-        }}>
+  return (
+    <div>
+      <Cube />
+      <div style={{ 
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 1,
+        color: 'white'
+      }}>
           <LoginSignup />
         </div>
       </div>

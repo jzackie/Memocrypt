@@ -27,8 +27,12 @@ export async function POST(req) {
   const resetKeyHash = crypto.createHash("sha256").update(resetKey).digest("hex");
   const resetKeyExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
 
+  console.log("[SIGNUP] Generated resetKey:", resetKey);
+  console.log("[SIGNUP] resetKeyHash:", resetKeyHash);
+
   // Create user
-  await User.create({ username, email, passwordHash, resetKeyHash, resetKeyExpires });
+  const newUser = await User.create({ username, email, passwordHash, resetKeyHash, resetKeyExpires });
+  console.log("[SIGNUP] Created user:", newUser);
 
   // Return reset key (show only once)
   return new Response(JSON.stringify({ resetKey }), { status: 201 });

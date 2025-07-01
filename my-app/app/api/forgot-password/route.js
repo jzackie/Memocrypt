@@ -20,6 +20,10 @@ export async function POST(req) {
   user.resetKeyHash = resetKeyHash;
   user.resetKeyExpires = resetKeyExpires;
   await user.save();
+  // Log for debugging
+  console.log("[FORGOT-PASSWORD] Generated resetKey:", resetKey);
+  console.log("[FORGOT-PASSWORD] resetKeyHash:", resetKeyHash);
+  console.log("[FORGOT-PASSWORD] User after save:", JSON.stringify(user, null, 2));
   // Return the new reset key
   return new Response(JSON.stringify({ resetKey }), { status: 200 });
 } 

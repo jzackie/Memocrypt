@@ -79,7 +79,7 @@ input {
 .forgot-password {
     display: flex;
     justify-content: center;
-    width: 150px;
+    width: 200px;
     margin: 10px auto 20px auto;
     text-align: center;
     cursor: pointer;
