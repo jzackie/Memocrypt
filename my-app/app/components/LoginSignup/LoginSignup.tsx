@@ -268,13 +268,6 @@ const LoginSignup = () => {
     }
   };
 
-  // Add a logout function to clear user and token
-  const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    window.location.href = '/';
-  };
-
   return (
     <div className="auth-container">
       <h2 className='form-heading'>

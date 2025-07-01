@@ -15,7 +15,7 @@ export async function POST(req) {
     return new Response(JSON.stringify({ error: "Invalid username or password" }), { status: 401 });
   }
   // Do not return sensitive fields
-  const { passwordHash, resetKeyHash, ...safeUser } = user.toObject();
+  const { passwordHash: _passwordHash, resetKeyHash: _resetKeyHash, ...safeUser } = user.toObject();
   // Issue JWT
   const token = jwt.sign(
     { userId: user._id },
