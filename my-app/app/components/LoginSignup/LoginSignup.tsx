@@ -226,24 +226,6 @@ const LoginSignup = () => {
   };
 
   // Handle file upload for reset key
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          if (!e.target?.result) throw new Error('No file content');
-          const data = JSON.parse(e.target.result as string);
-          resetForm.setValue('resetKey', data.resetKey);
-          toast.success("Reset Key Loaded! Your reset key has been loaded successfully");
-        } catch {
-          toast.error("Invalid File. Please select a valid reset key file");
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-
   const handleCopyResetKey = () => {
     // This function is no longer needed as reset key is not displayed in UI after signup
   };

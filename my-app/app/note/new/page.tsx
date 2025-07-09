@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "../../page.css";
+import Image from 'next/image';
 
 // Add minimalist icons at the top level
 const ClockIcon = () => (
@@ -227,7 +228,7 @@ export default function NewNotePage() {
                   <button onClick={() => handleDeleteAttachment(idx)} style={{ background: 'none', border: 'none', color: '#ff3939', fontSize: 16, cursor: 'pointer' }} title="Remove attachment"><TrashIcon /></button>
                   {att.type && att.type.startsWith('image') ? (
                     <a href={att.url} target="_blank" rel="noopener noreferrer">
-                      <img src={att.url} alt={att.name} style={{ maxWidth: 80, maxHeight: 80, borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
+                      <Image src={att.url || ''} alt={att.name || 'attachment'} width={80} height={80} style={{ borderRadius: 6, background: '#181818', cursor: 'pointer' }} />
                     </a>
                   ) : att.type && att.type.startsWith('video') ? (
                     <a href={att.url} target="_blank" rel="noopener noreferrer">
