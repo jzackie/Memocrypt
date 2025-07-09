@@ -38,9 +38,6 @@ export async function POST(req) {
     // After creating the user and generating the reset key:
     // Send the reset key via email with a downloadable link
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const resetKeyJson = JSON.stringify({ resetKey }, null, 2);
-    const resetKeyBase64 = Buffer.from(resetKeyJson).toString('base64');
-    const downloadLink = `data:application/json;base64,${resetKeyBase64}`;
     try {
       await resend.emails.send({
         from: 'onboarding@resend.dev',
