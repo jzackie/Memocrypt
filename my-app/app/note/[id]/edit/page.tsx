@@ -154,6 +154,7 @@ export default function EditNotePage() {
   };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      const prevScrollY = window.scrollY;
       const files = Array.from(e.target.files);
       const uploaded = await Promise.all(files.map(async (file) => {
         const formData = new FormData();
@@ -169,7 +170,14 @@ export default function EditNotePage() {
         }
         return null;
       }));
-      setAttachments(prev => [...prev, ...uploaded.filter((att): att is { url: string; type: string; name: string } => !!att)]);
+      setAttachments(prev => {
+        const newAttachments = [...prev, ...uploaded.filter((att): att is { url: string; type: string; name: string } => !!att)];
+        // Restore scroll after next paint
+        setTimeout(() => {
+          window.scrollTo({ top: prevScrollY });
+        }, 0);
+        return newAttachments;
+      });
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -182,7 +190,7 @@ export default function EditNotePage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#000", color: "#ededed", fontFamily: "var(--font-sans)", position: 'relative' }}>
+    <div style={{ background: "#000", color: "#ededed", fontFamily: "var(--font-sans)", position: 'relative' }}>
       <header className="main-header minimal-header">
         <span className="main-username">{user?.username || "Username"}</span>
         <button onClick={handleLogout} className="logout-btn" title="Logout">

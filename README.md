@@ -104,6 +104,7 @@ If you forget your password:
 - Files are uploaded directly to Cloudinary from the browser
 - Remove attachments with the trash icon before saving
 - All attachments are listed at the bottom of each note card
+- **Uploading files does not auto-scroll or jump the page; you can keep typing while files upload.**
 
 ## Security Features
 
@@ -119,8 +120,25 @@ If you forget your password:
 - Animated Cube background on login/signup
 - Sticky header and filter bar always visible
 - Dense, responsive notes grid with left-aligned content
-- Custom dark/green scrollbars
+- Custom dark/green scrollbars (hidden unless content overflows)
 - All containers and cards are scrollable if content overflows
+- **Scrollbars are hidden by default:** The website and modals only show scrollbars if content actually overflows, for a cleaner look
+- **Fully mobile-responsive:** All pages and actions are optimized for every device size, including very small screens
+- **Sticky, accessible action buttons:** Add File and Create Note buttons are always visible and easy to tap, even on the smallest devices, with extra safe padding and sticky positioning
+- **Back button and title alignment:** On mobile, the back button is next to the title for easy access; on desktop, both are aligned with the main content for a clean look
+- **No overlap or hidden actions:** All interactive elements are spaced and positioned to avoid being covered by the keyboard or screen edges on any device
+- **Scroll position is preserved when uploading files, so you can keep typing without interruption.**
+
+## Mobile Experience
+
+Memocrypt is designed to work seamlessly on all devices:
+
+- **Responsive layout:** The app adapts to any screen size, from large desktops to the smallest phones
+- **Sticky action row:** On very small devices, the Add File and Create Note buttons stick to the bottom of the screen, with extra padding to ensure they're never covered by the keyboard
+- **Touch-friendly:** All buttons and inputs are sized for comfortable tapping
+- **No horizontal scrolling:** Content always fits the screen width
+- **Consistent navigation:** The back button and title are always visible and accessible, with layouts optimized for both mobile and desktop
+- **Scrollbars hidden unless needed:** The app and modals only show scrollbars if content actually overflows, for a cleaner mobile experience
 
 ## Project Structure
 
