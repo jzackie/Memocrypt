@@ -44,6 +44,7 @@ const LoginSignup = () => {
   const [resetRequestSent, setResetRequestSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
+  const [signupResetKey, setSignupResetKey] = useState<string | null>(null);
 
   // Form hooks
   const signupForm = useForm<SignupForm>({
@@ -120,16 +121,11 @@ const LoginSignup = () => {
           password: data.password,
         }),
       });
-
       const result = await response.json();
-
       if (response.ok) {
-        // Store user data in localStorage for session management
-        localStorage.setItem('user', JSON.stringify(result.user));
-        localStorage.setItem('token', result.token);
+        setSignupResetKey(result.resetKey);
         toast.success('Account created successfully!');
-        // Redirect to main page
-        window.location.href = '/';
+        // Do not redirect yet; let user download/copy reset key
       } else {
         toast.error(result.error || 'Signup failed');
       }
@@ -246,6 +242,21 @@ const LoginSignup = () => {
     }
   };
 
+  // Download reset key after signup
+  const downloadSignupResetKey = () => {
+    if (!signupResetKey) return;
+    const data = { resetKey: signupResetKey };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'reset-key.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="auth-container">
       <h2 className='form-heading'>
@@ -325,6 +336,21 @@ const LoginSignup = () => {
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
+        )}
+
+        {signupResetKey && (
+          <div className="reset-key-modal">
+            <h3>Important: Save Your Reset Key</h3>
+            <p style={{ color: 'red', fontWeight: 'bold' }}>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered. Save it securely!</p>
+            <div className="reset-key-display">
+              <input type="text" value={signupResetKey} readOnly className="reset-key-input" />
+            </div>
+            <div className="reset-key-actions">
+              <button onClick={() => {navigator.clipboard.writeText(signupResetKey); toast.success('Reset key copied to clipboard!')}} className="copy-btn">Copy Reset Key</button>
+              <button onClick={downloadSignupResetKey} className="download-btn">Download Reset Key</button>
+            </div>
+            <button onClick={() => { setSignupResetKey(null); setView('signin'); }} className="go-to-login-btn">Go to Login</button>
+          </div>
         )}
 
         {view === 'signin' && (
