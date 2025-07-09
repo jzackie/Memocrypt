@@ -46,8 +46,8 @@ const LoginSignup = () => {
   const [resetRequestSent, setResetRequestSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
-  // Remove all code related to signupResetKey, showResetKey view, and reset key UI after signup.
-  // After successful signup, redirect to login or main page as before.
+  // Remove all code related to signupResetKey, the 'showResetKey' view, and reset key UI after signup.
+  // After successful signup, setView('signin') or redirect as before.
 
   // Form hooks
   const signupForm = useForm<SignupForm>({
