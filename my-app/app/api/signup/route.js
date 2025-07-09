@@ -38,13 +38,16 @@ export async function POST(req) {
     // After creating the user and generating the reset key:
     // Send the reset key via email with a downloadable link
     const resend = new Resend(process.env.RESEND_API_KEY);
+    const resetKeyJson = JSON.stringify({ resetKey }, null, 2);
+    const resetKeyBase64 = Buffer.from(resetKeyJson).toString('base64');
+    const downloadLink = `data:application/json;base64,${resetKeyBase64}`;
     try {
       await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: email,
         subject: 'Your Memocrypt Reset Key',
         html: `
-          <div style="background:#000;padding:32px 0;display:flex;align-items:center;justify-content:center;min-height:320px;">
+          <div style="background:#000;padding:32px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;">
             <p style="color:#ededed;font-size:18px;margin-bottom:18px;text-align:center;max-width:420px;">Your password reset key is below. <b>Save this key securely!</b></p>
             <div style='font-family:monospace;background:#222;color:#39ff14;padding:12px 18px;border-radius:8px;margin:18px 0;font-size:18px;'>${resetKey}</div>
             <p style='color:red;font-weight:bold;text-align:center;max-width:420px;'>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered.</p>
