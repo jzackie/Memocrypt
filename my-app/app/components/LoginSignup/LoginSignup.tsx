@@ -398,9 +398,11 @@ const LoginSignup = () => {
               Need a new reset key?
             </div>
             {resetRequestSent && (
-              <p className='text-green-500 text-sm mt-1'>
-                If an account exists, a reset email has been sent. Please check your email.
-              </p>
+              <div style={{ color: '#39ff14', fontWeight: 500, margin: '12px 0' }}>
+                If an account exists, a reset email has been sent. <br />
+                <b>Please check your email inbox and spam folder.</b><br />
+                <span style={{ color: '#ff3939', fontWeight: 600 }}>You can only request a password reset once every 3 days.</span>
+              </div>
             )}
             <div>
               <input 
