@@ -12,7 +12,7 @@ async function sendResetEmail(to, resetKey) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const result = await resend.emails.send({
-      from: 'no-reply@memocrypt.vercel.app',
+      from: 'onboarding@resend.dev',
       to,
       subject: 'Your Memocrypt Password Reset Key',
       html: `<p>Your password reset key is: <b>${resetKey}</b></p><p style='color:red'><b>Note:</b> You can only request a password reset once every 3 days.</p>`

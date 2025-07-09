@@ -7,9 +7,16 @@ export async function POST(req) {
   try {
     const { username, email, password } = await req.json();
     await dbConnect();
-    // Check if user exists
-    if (await User.findOne({ username })) {
-      return new Response(JSON.stringify({ error: "User already exists" }), { status: 400 });
+    // Check if user exists by username or email
+    const existingUser = await User.findOne({ $or: [ { username }, { email } ] });
+    if (existingUser) {
+      if (existingUser.username === username && existingUser.email === email) {
+        return new Response(JSON.stringify({ error: "Username and email already exist" }), { status: 400 });
+      } else if (existingUser.username === username) {
+        return new Response(JSON.stringify({ error: "Username already exists" }), { status: 400 });
+      } else {
+        return new Response(JSON.stringify({ error: "Email already exists" }), { status: 400 });
+      }
     }
     // Password policy
     const passwordPolicy = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{12,}$/;
