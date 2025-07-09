@@ -68,4 +68,4 @@ export async function POST(req) {
   }
   // Generic response
   return new Response(JSON.stringify({ message: "If an account exists, a reset email has been sent." }), { status: 200 });
-} 
+}
