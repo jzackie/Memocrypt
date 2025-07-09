@@ -234,7 +234,8 @@ const LoginSignup = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const data = JSON.parse(e.target?.result as string);
+          if (!e.target?.result) throw new Error('No file content');
+          const data = JSON.parse(e.target.result as string);
           resetForm.setValue('resetKey', data.resetKey);
           toast.success("Reset Key Loaded! Your reset key has been loaded successfully");
         } catch {
