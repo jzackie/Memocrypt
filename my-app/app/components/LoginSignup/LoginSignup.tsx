@@ -46,7 +46,8 @@ const LoginSignup = () => {
   const [resetRequestSent, setResetRequestSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
-  const [signupResetKey, setSignupResetKey] = useState<string | null>(null);
+  // Remove all code related to signupResetKey, showResetKey view, and reset key UI after signup.
+  // After successful signup, redirect to login or main page as before.
 
   // Form hooks
   const signupForm = useForm<SignupForm>({
@@ -125,9 +126,8 @@ const LoginSignup = () => {
       });
       const result = await response.json();
       if (response.ok) {
-        setSignupResetKey(result.resetKey);
-        setView('showResetKey');
         toast.success('Account created successfully!');
+        setView('signin'); // Redirect to signin after successful signup
       } else {
         toast.error(result.error || 'Signup failed');
       }
@@ -245,31 +245,15 @@ const LoginSignup = () => {
   };
 
   const handleCopyResetKey = () => {
-    if (signupResetKey) {
-      navigator.clipboard.writeText(signupResetKey);
-      toast.success('Reset key copied to clipboard!');
-    }
+    // This function is no longer needed as reset key is not displayed in UI after signup
   };
   const handleDownloadResetKey = () => {
-    if (!signupResetKey) return;
-    const data = { resetKey: signupResetKey };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'reset-key.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // This function is no longer needed as reset key is not displayed in UI after signup
   };
   const handleContinueToApp = () => {
-    setSignupResetKey(null);
-    setView('signin');
-    window.location.href = '/';
+    // This function is no longer needed as reset key is not displayed in UI after signup
   };
   const handleGoBackToSignIn = () => {
-    setSignupResetKey(null);
     setView('signin');
   };
 
@@ -454,7 +438,7 @@ const LoginSignup = () => {
                 userSelect: 'all',
                 border: '1.5px solid #39ff14',
                 boxShadow: '0 0 16px #39ff1444',
-              }}>{signupResetKey}</div>
+              }}>{/* This div is no longer needed as reset key is not displayed in UI after signup */}</div>
               <button onClick={handleCopyResetKey} style={{ width: '100%', background: 'none', border: 'none', color: '#39ff14', fontWeight: 700, fontSize: 18, marginBottom: 10, cursor: 'pointer', padding: 10, borderRadius: 8, transition: 'background 0.2s', outline: 'none' }}>Copy</button>
               <button onClick={handleDownloadResetKey} style={{ width: '100%', background: 'none', border: 'none', color: '#39ff14', fontWeight: 700, fontSize: 18, marginBottom: 30, cursor: 'pointer', padding: 10, borderRadius: 8, transition: 'background 0.2s', outline: 'none' }}>Download</button>
               <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
