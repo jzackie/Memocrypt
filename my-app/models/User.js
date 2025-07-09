@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     resetKeyHash: { type: String },
     resetKeyExpires: { type: Date },
+    lastResetRequest: { type: Date, default: null }, // For persistent rate limiting
   },
   { timestamps: true }
 );

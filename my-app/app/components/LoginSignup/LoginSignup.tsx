@@ -40,8 +40,8 @@ type SigninForm = z.infer<typeof signinSchema>;
 type ResetForm = z.infer<typeof resetSchema>;
 
 const LoginSignup = () => {
-  const [view, setView] = useState<'signin' | 'signup' | 'forgot' | 'reset' | 'resetKey' | 'requestResetKey'>('signin');
-  const [resetKey, setResetKey] = useState<string>('');
+  const [view, setView] = useState<'signin' | 'signup' | 'forgot' | 'reset' | 'requestResetKey'>('signin');
+  const [resetRequestSent, setResetRequestSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
 
@@ -90,8 +90,7 @@ const LoginSignup = () => {
       });
       const result = await response.json();
       if (response.ok) {
-        setResetKey(result.resetKey);
-        setView('resetKey');
+        setResetRequestSent(true);
         setResetRequestResult(null);
         toast.success('Reset key generated!');
       } else {
@@ -125,9 +124,12 @@ const LoginSignup = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setResetKey(result.resetKey);
-        setView('resetKey');
+        // Store user data in localStorage for session management
+        localStorage.setItem('user', JSON.stringify(result.user));
+        localStorage.setItem('token', result.token);
         toast.success('Account created successfully!');
+        // Redirect to main page
+        window.location.href = '/';
       } else {
         toast.error(result.error || 'Signup failed');
       }
@@ -243,31 +245,6 @@ const LoginSignup = () => {
     }
   };
 
-  // Download reset key
-  const downloadResetKey = () => {
-    const data = { resetKey };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'reset-key.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  // Copy reset key to clipboard
-  const copyResetKey = async () => {
-    try {
-      await navigator.clipboard.writeText(resetKey);
-      toast.success('Reset key copied to clipboard!');
-      await new Promise(res => setTimeout(res, 600));
-    } catch {
-      toast.error('Failed to copy reset key');
-    }
-  };
-
   return (
     <div className="auth-container">
       <h2 className='form-heading'>
@@ -275,7 +252,6 @@ const LoginSignup = () => {
         {view === 'signup' && 'Sign Up'}
         {view === 'forgot' && 'Forgot password'}
         {view === 'reset' && 'Reset password'}
-        {view === 'resetKey' && 'Your Reset Key'}
         {view === 'requestResetKey' && 'Request Reset Key'}
       </h2>
 
@@ -421,6 +397,11 @@ const LoginSignup = () => {
             <div className='forgot-password' onClick={() => setView('requestResetKey')}>
               Need a new reset key?
             </div>
+            {resetRequestSent && (
+              <p className='text-green-500 text-sm mt-1'>
+                If an account exists, a reset email has been sent. Please check your email.
+              </p>
+            )}
             <div>
               <input 
                 type='file' 
@@ -477,40 +458,6 @@ const LoginSignup = () => {
               Go back to login
             </div>
           </>
-        )}
-
-        {view === 'resetKey' && (
-          <div className="reset-key-container">
-            <div className="reset-key-info">
-              <h3>Important: Save Your Reset Key</h3>
-              <p style={{ color: 'red', fontWeight: 'bold' }}>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered. Save it securely!</p>
-            </div>
-            
-            <div className="reset-key-display">
-              <input
-                type="text"
-                value={resetKey}
-                readOnly
-                className="reset-key-input"
-              />
-            </div>
-
-            <div className="reset-key-actions">
-              <button onClick={copyResetKey} className="copy-btn">
-                Copy Reset Key
-              </button>
-              <button onClick={downloadResetKey} className="download-btn">
-                Download Reset Key
-              </button>
-            </div>
-
-            <div 
-              className='forgot-password'
-              onClick={() => setView('signin')}
-            >
-              Go to Login
-            </div>
-          </div>
         )}
       </div>
     </div>
