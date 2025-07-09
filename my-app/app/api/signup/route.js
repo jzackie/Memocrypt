@@ -46,10 +46,32 @@ export async function POST(req) {
         from: 'onboarding@resend.dev',
         to: email,
         subject: 'Your Memocrypt Reset Key',
-        html: `<p>Your password reset key is below. <b>Download and save this file securely!</b></p>
-               <div style='font-family:monospace;background:#222;color:#39ff14;padding:12px 18px;border-radius:8px;margin:18px 0;font-size:18px;'>${resetKey}</div>
-               <a href='${downloadLink}' download='reset-key.json' style='display:inline-block;padding:12px 24px;background:#39ff14;color:#111;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:16px;'>Download Reset Key</a>
-               <p style='color:red;font-weight:bold;'>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered.</p>`
+        html: `
+          <div style="background:#000;padding:32px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;">
+            <div style="margin-bottom:24px;">
+              <!-- Static Cube SVG -->
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#shadow)">
+                  <rect x="12" y="12" width="40" height="40" rx="8" fill="#000A03"/>
+                  <rect x="12" y="12" width="40" height="40" rx="8" fill="url(#cubeGradient)" fill-opacity="0.7"/>
+                  <rect x="12" y="12" width="40" height="40" rx="8" stroke="#00DB00" stroke-width="2"/>
+                </g>
+                <defs>
+                  <filter id="shadow" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse">
+                    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00DB00" flood-opacity="0.4"/>
+                  </filter>
+                  <linearGradient id="cubeGradient" x1="12" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#001100"/>
+                    <stop offset="1" stop-color="#00DB00"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <p style="color:#ededed;font-size:18px;margin-bottom:18px;text-align:center;max-width:420px;">Your password reset key is below. <b>Save this key securely!</b></p>
+            <div style='font-family:monospace;background:#222;color:#39ff14;padding:12px 18px;border-radius:8px;margin:18px 0;font-size:18px;'>${resetKey}</div>
+            <p style='color:red;font-weight:bold;text-align:center;max-width:420px;'>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered.</p>
+          </div>
+        `
       });
     } catch (e) {
       console.error('[SIGNUP] Failed to send reset key email:', e);

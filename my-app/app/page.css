@@ -209,11 +209,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0 0.5rem 0;
   font-size: 13px;
   color: #ededed;
-  height: 32px;
-  min-height: 32px;
+  height: 32px !important;
+  min-height: 32px !important;
 }
 .main-username {
   padding-left: 10px;
@@ -368,6 +367,10 @@ body {
   backdrop-filter: blur(4px);
 }
 
+.main-header {
+  min-height: 32px !important;
+}
+
 /* Custom scrollbar for dark, minimal, green-accented aesthetic */
 ::-webkit-scrollbar {
   width: 8px;
@@ -493,8 +496,8 @@ body {
     padding: 0.5rem 0 0.5rem 0;
     font-size: 13px;
     color: #ededed;
-    height: 32px;
-    min-height: 32px;
+    height: 32px !important;
+    min-height: 32px !important;
   }
   .main-username {
     color: #ededed;
