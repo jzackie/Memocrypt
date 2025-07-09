@@ -8,14 +8,17 @@ import nodemailer from "nodemailer";
 async function sendResetEmail(to, resetKey) {
   if (process.env.NODE_ENV === "production") {
     console.log("[FORGOT-PASSWORD] Using Resend for email (production mode)");
+    console.log("[FORGOT-PASSWORD] To:", to);
+    console.log("[FORGOT-PASSWORD] RESEND_API_KEY present:", !!process.env.RESEND_API_KEY);
     const resend = new Resend(process.env.RESEND_API_KEY);
     try {
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: 'onboarding@resend.dev',
         to,
         subject: 'Your Memocrypt Password Reset Key',
         html: `<p>Your password reset key is: <b>${resetKey}</b></p>`
       });
+      console.log("[FORGOT-PASSWORD] Resend API response:", result);
     } catch (e) {
       console.error("[FORGOT-PASSWORD] Resend email error:", e);
     }
