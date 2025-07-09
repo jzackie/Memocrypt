@@ -44,10 +44,7 @@ export async function POST(req) {
         to: email,
         subject: 'Your Memocrypt Reset Key',
         html: `
-          <div style="background:#000;padding:32px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;">
-            <div style="margin-bottom:24px;">
-              <!-- Static Cube SVG -->
-            </div>
+          <div style="background:#000;padding:32px 0;display:flex;flex-direction:row;align-items:center;justify-content:center;min-height:320px;">
             <p style="color:#ededed;font-size:18px;margin-bottom:18px;text-align:center;max-width:420px;">Your password reset key is below. <b>Save this key securely!</b></p>
             <div style='font-family:monospace;background:#222;color:#39ff14;padding:12px 18px;border-radius:8px;margin:18px 0;font-size:18px;'>${resetKey}</div>
             <p style='color:red;font-weight:bold;text-align:center;max-width:420px;'>This is the ONLY way to reset your password if you forget it. If you lose this key, your account and notes CANNOT be recovered.</p>
