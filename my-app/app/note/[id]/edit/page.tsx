@@ -42,8 +42,9 @@ export default function EditNotePage() {
   const CLOUDINARY_CLOUD_NAME = 'df4onlwnk';
 
   useEffect(() => {
-    const u = localStorage.getItem("user");
-    if (u) setUser(JSON.parse(u));
+    const uStr = localStorage.getItem("user");
+    const u = uStr ? JSON.parse(uStr) : null;
+    if (u) setUser(u);
   }, []);
 
   useEffect(() => {

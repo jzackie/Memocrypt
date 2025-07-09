@@ -127,8 +127,9 @@ export default function MainPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const u = localStorage.getItem("user");
-    if (u) setUser(JSON.parse(u));
+    const uStr = localStorage.getItem("user");
+    const u = uStr ? JSON.parse(uStr) : null;
+    if (u) setUser(u);
   }, []);
 
   useEffect(() => {

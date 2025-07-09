@@ -40,8 +40,9 @@ export default function NewNotePage() {
   const contentRef = useRef(content);
 
   useEffect(() => {
-    const u = localStorage.getItem("user");
-    if (u) setUser(JSON.parse(u));
+    const uStr = localStorage.getItem("user");
+    const u = uStr ? JSON.parse(uStr) : null;
+    if (u) setUser(u);
   }, []);
 
   useEffect(() => {
