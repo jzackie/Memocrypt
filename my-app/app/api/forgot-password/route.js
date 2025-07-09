@@ -2,7 +2,6 @@ import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
 import crypto from "crypto";
 import { Resend } from "resend";
-import nodemailer from "nodemailer";
 
 // Utility to send email using Resend in production, Ethereal in development
 async function sendResetEmail(to, resetKey) {
