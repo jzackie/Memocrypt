@@ -62,7 +62,7 @@ export default function ResetKeyPage() {
         position: 'relative',
       }}>
         <h2 style={{ color: '#fff', fontWeight: 600, fontSize: 28, marginBottom: 8 }}>Reset Key</h2>
-        <div style={{ color: '#aaa', fontSize: 15, marginBottom: 24 }}>Keep it safe, it's the only way to reset your password!</div>
+        <div style={{ color: '#aaa', fontSize: 15, marginBottom: 24 }}>Keep it safe, it&apos;s the only way to reset your password!</div>
         <div style={{
           background: '#222',
           borderRadius: 16,

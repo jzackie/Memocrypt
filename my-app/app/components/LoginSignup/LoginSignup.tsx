@@ -44,7 +44,6 @@ const LoginSignup = () => {
   const [resetRequestSent, setResetRequestSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetRequestResult, setResetRequestResult] = useState<string | null>(null);
-  const [signupResetKey, setSignupResetKey] = useState<string | null>(null);
 
   // Form hooks
   const signupForm = useForm<SignupForm>({
@@ -240,21 +239,6 @@ const LoginSignup = () => {
       };
       reader.readAsText(file);
     }
-  };
-
-  // Download reset key after signup
-  const downloadSignupResetKey = () => {
-    if (!signupResetKey) return;
-    const data = { resetKey: signupResetKey };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'reset-key.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   return (
