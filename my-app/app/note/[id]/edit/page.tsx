@@ -43,7 +43,7 @@ export default function EditNotePage() {
 
   useEffect(() => {
     const uStr = localStorage.getItem("user");
-    const u = uStr ? JSON.parse(uStr) : null;
+    const u = uStr && uStr !== "undefined" ? JSON.parse(uStr) : null;
     if (u) setUser(u);
   }, []);
 
