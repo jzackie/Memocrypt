@@ -40,6 +40,8 @@ export default function EditNotePage() {
   const [attachments, setAttachments] = useState<{ url: string; type?: string; name?: string }[]>([]);
   const CLOUDINARY_UPLOAD_PRESET = 'unsigned-notes';
   const CLOUDINARY_CLOUD_NAME = 'df4onlwnk';
+  const [localCreatedAt, setLocalCreatedAt] = useState<string>("");
+  useEffect(() => { setLocalCreatedAt(createdAt); }, [createdAt]);
 
   useEffect(() => {
     const uStr = localStorage.getItem("user");
@@ -187,12 +189,26 @@ export default function EditNotePage() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
       </header>
-      {/* Absolutely positioned back button */}
-      <button onClick={handleBack} style={{ position: 'absolute', left: 24, top: 'calc(32px + 24px)', background: 'none', border: 'none', color: '#39ff14', fontSize: 24, cursor: 'pointer', padding: 0, height: 48, minWidth: 32, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', zIndex: 10 }} title="Back">
-        &#8592;
-      </button>
+      {/* Mobile: title and back button in a row */}
+      <div className="mobile-title-row">
+        <input
+          className="note-title-input"
+          placeholder="Title"
+          value={title}
+          onChange={handleTitleChange}
+          maxLength={100}
+          style={{ fontWeight: 700, fontSize: 28, border: 'none', color: '#ededed', outline: 'none', marginBottom: 0, padding: 0, height: 48, textAlign: 'left', width: '100%' }}
+        />
+        <button onClick={handleBack} className="mobile-back-btn" title="Back">
+          &#8592;
+        </button>
+      </div>
       <div className="main-centered-container">
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', marginTop: 24, marginBottom: 0, justifyContent: 'space-between' }}>
+        {/* Desktop: back button, title input, and status row */}
+        <div className="desktop-title-row">
+          <button onClick={handleBack} className="desktop-back-btn" title="Back">
+            &#8592;
+          </button>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
             <input
               className="note-title-input"
@@ -212,7 +228,7 @@ export default function EditNotePage() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#aaa', fontSize: 13, margin: '8px 0 2px 0' }}>
             <ClockIcon />
-            <span>{createdAt ? formatDate(createdAt) : ''}</span>
+            <span>{localCreatedAt ? formatDate(localCreatedAt) : ''}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#aaa', fontSize: 13, marginBottom: 18 }}>
             <EditIcon />

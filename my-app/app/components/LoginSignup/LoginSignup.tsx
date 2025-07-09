@@ -473,14 +473,6 @@ const LoginSignup = () => {
                   </div>
                 )}
                 <div>
-                  <input 
-                    type='file' 
-                    accept='.json' 
-                    onChange={handleFileUpload} 
-                    className='upload_reset_key'
-                  />
-                </div>
-                <div>
                   <input
                     {...resetForm.register("usernameOrEmail")}
                     placeholder='Enter username or email'

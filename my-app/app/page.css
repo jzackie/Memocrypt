@@ -216,6 +216,7 @@
   min-height: 32px;
 }
 .main-username {
+  padding-left: 10px;
   color: #ededed;
   font-size: 12px;
   font-weight: 400;
@@ -249,7 +250,7 @@
 /* Floating create button */
 .floating-create-btn.minimal-create-btn {
   position: fixed;
-  right: 100px;
+  right: 50px;
   background: #18181800;
   color: #39ff14;
   border: none;
@@ -386,8 +387,7 @@ body {
 
 @media (max-width: 600px) {
   .main-header {
-    padding: 0.7rem 1rem;
-    font-size: 15px;
+    padding: 0.7rem 0.7rem;
   }
   .main-username {
     font-size: 15px;
@@ -459,9 +459,260 @@ body {
     bottom: 12px;
   }
   .main-centered-container {
-    padding: 0 2px;
+    padding: 0 0.5rem;
   }
   .main-notes-content {
     padding: 0 2px;
+  }
+  .main-header.minimal-header {
+    width: 98vw;
+    margin-left: 1vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0 0.5rem 0;
+    font-size: 13px;
+    color: #ededed;
+    height: 32px;
+    min-height: 32px;
+  }
+  .main-username {
+    color: #ededed;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin-top: 2px;
+  }
+  .logout-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #39ff14;
+    transition: color 0.2s;
+  }
+  .logout-btn:hover svg {
+    filter: brightness(1.5);
+  }
+  .note-title-input {
+    font-size: 18px !important;
+    height: 36px !important;
+    padding-left: 8px !important;
+  }
+  /* Back button fix */
+  .mobile-back-btn {
+    position: static !important;
+    left: unset !important;
+    top: unset !important;
+    min-width: 0 !important;
+    height: 36px !important;
+    font-size: 20px !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10;
+  }
+  .note-action-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 0 18vw 0;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: none;
+    position: relative;
+    z-index: 10;
+  }
+  .note-action-row button {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+    padding: 0.9rem;
+    border-radius: 14px;
+    margin-bottom: 8px;
+  }
+  .mobile-title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 0;
+    gap: 10px;
+  }
+  .mobile-title-row .note-title-input {
+    flex: 1 1 0%;
+    min-width: 0;
+    margin-right: 8px;
+  }
+  .mobile-title-row .mobile-back-btn {
+    flex-shrink: 0;
+    margin-left: 0;
+    margin-right: 0;
+    align-self: center;
+    font-size: 2rem;
+    height: 44px;
+    min-width: 36px;
+    padding: 0 8px;
+  }
+  .desktop-title-row {
+    display: none;
+  }
+}
+@media (min-width: 601px) {
+  .mobile-title-row {
+    display: none;
+  }
+  .desktop-title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 0;
+    justify-content: space-between;
+  }
+}
+@media (max-width: 400px) {
+  .main-header {
+    padding: 0.4rem 0.2rem;
+  }
+  .main-username {
+    font-size: 13px;
+  }
+  .note-title-input {
+    font-size: 15px !important;
+    height: 30px !important;
+  }
+  .mobile-back-btn {
+    height: 30px !important;
+    font-size: 16px !important;
+    margin-bottom: 6px;
+  }
+  .note-action-row {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    padding: 12px 8px max(22vw, 80px) 8px;
+    background: rgba(0,0,0,0.97);
+    box-shadow: 0 -2px 12px #0008;
+    gap: 12px;
+    z-index: 100;
+  }
+  .note-action-row button {
+    font-size: 15px;
+    padding: 1.1rem 0.7rem;
+    border-radius: 16px;
+  }
+} 
+
+/* Back button wrapper: always visible above the title */
+.responsive-back-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 0;
+  position: static;
+  z-index: 20;
+}
+.mobile-back-btn {
+  position: static !important;
+  left: unset !important;
+  top: unset !important;
+  background: none;
+  border: none;
+  color: #39ff14;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0 0 0 8px;
+  height: 44px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 20;
+  margin-bottom: 0;
+} 
+
+/* Desktop: absolutely positioned back button */
+@media (min-width: 601px) {
+  .responsive-back-btn-wrapper {
+    display: none;
+  }
+  .desktop-back-btn {
+    position: absolute;
+    left: 24px;
+    top: calc(32px + 24px);
+    background: none;
+    border: none;
+    color: #39ff14;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    height: 48px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10;
+  }
+} 
+
+@media (max-width: 768px) {
+  .mobile-title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 0;
+    gap: 10px;
+  }
+  .mobile-title-row .note-title-input {
+    flex: 1 1 0%;
+    min-width: 0;
+    margin-right: 8px;
+  }
+  .mobile-title-row .mobile-back-btn {
+    flex-shrink: 0;
+    margin-left: 0;
+    margin-right: 0;
+    align-self: center;
+    font-size: 2rem;
+    height: 44px;
+    min-width: 36px;
+    padding: 0 8px;
+  }
+  .desktop-title-row {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  .mobile-title-row {
+    display: none;
+  }
+  .desktop-title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 0;
+    justify-content: space-between;
+    padding-left: 0;
+  }
+  .desktop-title-row .desktop-back-btn {
+    margin-right: 0;
   }
 } 

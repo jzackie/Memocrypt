@@ -260,3 +260,55 @@ form {
     padding: 0;
   }
 }
+@media (max-width: 400px) {
+  .auth-container {
+    width: 100vw;
+    padding: 0.5rem 0.2rem;
+    border-radius: 8px;
+  }
+  .form-heading {
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .form-toggle button {
+    font-size: 13px;
+    padding: 0.3rem;
+  }
+  input {
+    font-size: 13px;
+    padding: 0.4rem;
+    border-radius: 10px;
+  }
+  .form-body button {
+    font-size: 13px;
+    padding: 0.4rem;
+    border-radius: 10px;
+  }
+}
+@media (max-width: 350px) {
+  .auth-container {
+    width: 100vw;
+    padding: 0.2rem 0.1rem;
+    border-radius: 5px;
+  }
+  .form-heading {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.8rem;
+  }
+  .form-toggle button {
+    font-size: 11px;
+    padding: 0.2rem;
+  }
+  input {
+    font-size: 11px;
+    padding: 0.2rem;
+    border-radius: 7px;
+  }
+  .form-body button {
+    font-size: 11px;
+    padding: 0.2rem;
+    border-radius: 7px;
+  }
+}
